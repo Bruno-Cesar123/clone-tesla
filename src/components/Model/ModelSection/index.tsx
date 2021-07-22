@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import useModel from '../useModel';
 
 import { Container } from './styles';
 
@@ -13,8 +14,19 @@ const ModelSection: React.FC<Props> = ({
   children,
   ...props
 }) => {
+
+  const { registerModel } = useModel(modelName);
+
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      registerModel({ modelName, overlayNode, sectionRef })
+    }
+  }, [ modelName, overlayNode, registerModel ]);
+
   return (
-    <Container {...props}>
+    <Container ref={sectionRef} {...props}>
       {children}
     </Container> 
   )
